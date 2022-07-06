@@ -1,0 +1,57 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+    var data = TreeGridItems.GetTreeData();
+}
+
+<ejs-treegrid id="TreeGrid" dataSource="@data" childMapping="Children" treeColumnIndex="1" expanded="expanded" collapsed="collapsed" dataBound="ondataBound">
+    <e-treegrid-columns>
+        <e-treegrid-column field="TaskId" isPrimaryKey="true" headerText="Task ID" textAlign="Right" width="95"></e-treegrid-column>
+        <e-treegrid-column field="TaskName" headerText="Task Name" width="220"></e-treegrid-column>
+        <e-treegrid-column field="StartDate" headerText=" Start Date" textAlign="Right" format="yMd" type="date" width="115"></e-treegrid-column>
+        <e-treegrid-column field="Duration" headerText="Duration" textAlign="Right" width="100"></e-treegrid-column>
+    </e-treegrid-columns>
+</ejs-treegrid>
+
+<script>
+    let currentData = [];
+    function collapsed(args) {
+        currentData.push(args.data);
+       store(args);
+        //storing collapsed record in local storage using setItem method
+    }
+    function expanded(args) {
+        currentData.push(args.data);
+        store(args);
+        //storing collapsed record in local storage using setItem method
+    }
+    function store(args) {
+        var treegridObj = document.getElementById("TreeGrid").ej2_instances[0];
+        currentData.push(currentData.push(...treegridObj.getCurrentViewRecords().filter((i) => i.hasChildRecords).filter((i) => !i.expanded)));
+        currentData = Array.from(new Set(currentData));
+        window.localStorage.setItem('currentData',JSON.stringify(currentData));
+    }
+    function ondataBound(args) {
+        if (this.initialRender) {
+            //checking whether it is initial rendering
+            var data = JSON.parse(window.localStorage.getItem('currentData'));
+            //retriving collapsed record in local storage using getItem method
+            if (data) {
+                var completeData = this.grid.dataSource;
+                var primaryKeyFieldName = this.getPrimaryKeyFieldNames()[0];
+                for (var i = 0; i < data.length; i++) {
+                    var value;
+                    for (var j = 0; j < completeData.length; j++) {
+                        if (completeData[j][primaryKeyFieldName] == data[i][primaryKeyFieldName] ) {
+                            value = completeData[j];
+                        }
+                    }
+                    this.collapseRow(null, value); //collapsing row using collapseRow method
+                }
+                this.currentData = [];
+                window.localStorage.setItem('currentData',JSON.stringify(this.currentData));
+            }
+        }
+    }
+</script>
