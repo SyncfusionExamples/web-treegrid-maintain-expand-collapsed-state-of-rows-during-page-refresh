@@ -1,0 +1,57 @@
+﻿﻿@using Syncfusion.EJ2
+@{
+    ViewBag.Title = "Home Page";
+}
+
+@model List<MVCTreeGrid.Controllers.TreeGridItems>
+
+@Html.EJS().TreeGrid("TreeGrid").DataSource((IEnumerable<object>)Model).Columns(col =>
+{
+   col.Field("TaskId").HeaderText("Task ID").Width(70).IsPrimaryKey(true).TextAlign(Syncfusion.EJ2.Grids.TextAlign.Right).Add();
+   col.Field("TaskName").HeaderText("Task Name").Width(160).Add();
+   col.Field("StartDate").HeaderText("Start Date").Format("yMd").TextAlign(Syncfusion.EJ2.Grids.TextAlign.Right).Width(90).Add();
+   col.Field("Duration").HeaderText("Duration").Width(80).TextAlign(Syncfusion.EJ2.Grids.TextAlign.Right).Add();
+}).ChildMapping("Children").TreeColumnIndex(1).DataBound("ondataBound").Collapsed("collapsed").Expanded("expanded").Render().
+
+<script>
+    let currentData = [];
+    function collapsed(args) {
+        currentData.push(args.data);
+        store(args);
+        //storing collapsed record in local storage using setItem method
+    }
+    function expanded(args) {
+        currentData.push(args.data);
+        store(args);
+        //storing collapsed record in local storage using setItem method
+    }
+
+    function store(args) {
+        var treegrid = document.getElementById("TreeGrid").ej2_instances[0];
+        currentData.push(currentData.push(...treegrid.getCurrentViewRecords().filter((i) => i.hasChildRecords).filter((i) => !i.expanded)));
+        currentData = Array.from(new Set(currentData));
+        window.localStorage.setItem('currentData',JSON.stringify(currentData));
+    }
+    function ondataBound(args) {
+        if (this.initialRender) {
+            //checking whether it is initial rendering
+            var data = JSON.parse(window.localStorage.getItem('currentData'));
+            //retriving collapsed record in local storage using getItem method
+            if (data) {
+                var completeData = this.grid.dataSource;
+                var primaryKeyFieldName = this.getPrimaryKeyFieldNames()[0];
+                for (var i = 0; i < data.length; i++) {
+                    var value;
+                    for (var j = 0; j < completeData.length; j++) {
+                        if (completeData[j][primaryKeyFieldName] == data[i][primaryKeyFieldName] ) {
+                            value = completeData[j];
+                        }
+                    }
+                    this.collapseRow(null, value); //collapsing row using collapseRow method
+                }
+                this.currentData = [];
+                window.localStorage.setItem('currentData',JSON.stringify(this.currentData));
+            }
+        }
+    }
+</script>
