@@ -10,11 +10,11 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
-    "@syncfusion/ej2-vue-buttons": "19.2.60",
-    "@syncfusion/ej2-vue-grids": "^20.1.61",
-    "@syncfusion/ej2-vue-inputs": "^20.1.61",
-    "@syncfusion/ej2-vue-navigations": "^20.1.61",
-    "@syncfusion/ej2-vue-treegrid": "19.2.60",
+    "@syncfusion/ej2-vue-buttons": "^33.1.44",
+    "@syncfusion/ej2-vue-grids": "^33.1.44",
+    "@syncfusion/ej2-vue-inputs": "^33.1.44",
+    "@syncfusion/ej2-vue-navigations": "^33.1.44",
+    "@syncfusion/ej2-vue-treegrid": "^33.1.44",
     "vue": "^2.5.11",
     "vue-class-component": "^7.2.6"
   },
@@ -31,7 +31,7 @@
     "cross-env": "^5.0.5",
     "css-loader": "^0.28.7",
     "file-loader": "^1.1.4",
-    "ts-loader": "^9.3.1",
+    "ts-loader": "^3.5.0",
     "vue-loader": "^13.0.5",
     "vue-template-compiler": "^2.4.4",
     "webpack": "^3.6.0",
