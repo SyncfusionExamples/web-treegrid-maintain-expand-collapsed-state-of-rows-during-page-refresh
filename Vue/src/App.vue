@@ -14,12 +14,15 @@
 </div>
 </template>
 <script>
-import Vue from "vue";
-import { TreeGridPlugin, Page, Edit } from "@syncfusion/ej2-vue-treegrid";
+import { TreeGridComponent, ColumnsDirective, ColumnDirective, Page, Edit } from "@syncfusion/ej2-vue-treegrid";
 import { sampleData } from "./datasource.js";
-Vue.use(TreeGridPlugin);
 
 export default {
+  components: {
+    'ejs-treegrid': TreeGridComponent,
+    'e-columns': ColumnsDirective,
+    'e-column': ColumnDirective
+  },
   data ()  {
     return {
       currentData : [],
@@ -28,8 +31,10 @@ export default {
       editSettings: { allowEditing: true, allowAdding: true, allowDeleting: true, mode:"Row" },
     };
   },
-  provide: {
+  provide: function() {
+    return {
       treegrid: [ Page, Edit ]
+    };
   },
   methods:{
     dataBound:function (args) {

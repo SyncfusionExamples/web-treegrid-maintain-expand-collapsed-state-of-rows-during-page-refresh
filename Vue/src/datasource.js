@@ -1,8 +1,5 @@
 
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.sampleData = [
+export var sampleData = [
         {
             taskID: 1,
             taskName: 'Planning',
@@ -126,4 +123,3 @@ define(["require", "exports"], function (require, exports) {
             ]
         }
     ];
-});
